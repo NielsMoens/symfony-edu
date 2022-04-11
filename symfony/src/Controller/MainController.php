@@ -21,6 +21,7 @@ class MainController extends AbstractController
     #[Route('/start/{name?}', name: 'app_start')]
     public function start (Request $request, $name): Response
     {
-        return new Response('<h1>hallowkes</h1>');
+        $randomNumber = random_int(0,100);
+        return new Response('<h1>hallowkes ' . $name .  ' your number is ' . $randomNumber. '</h1>');
     }
 }
