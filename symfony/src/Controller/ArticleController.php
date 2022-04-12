@@ -29,7 +29,7 @@ class ArticleController extends AbstractController
 
         // find an specific article in the db
         $getArticle = $entityManager->getRepository(Article::class)->findOneBy([
-            'id'=>1
+            'id'=>2
         ]);
 
         // remove something from the db
