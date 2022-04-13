@@ -37,6 +37,19 @@ class DishController extends AbstractController
         if ( $form->isSubmitted()){
             //Entity Manager
             $entityManager = $doctrine->getManager();
+            $img = $request->files->get('dish')['attachment'];
+
+            //check if there is an image if -> generate a unique name for each upload (in case images with the same file name are uploaded
+            if ($img){
+                $filename = md5(uniqid()). '.' . $img->guessExtension();
+            }
+
+            $img->move(
+                $this->getParameter('images_folder'),
+                $filename
+            );
+
+            $dish->setImage($filename);
             $entityManager->persist($dish);
             $entityManager->flush();
 
@@ -62,5 +75,15 @@ class DishController extends AbstractController
         $this->addFlash('succes', 'Dish was removed successfully');
 
         return $this->redirect($this->generateUrl('dish.edit'));
+    }
+
+    //@paramConverter: $request are converted in to objects
+    #[Route('/show{id}', name: 'show')]
+    public function show(Dish $dish) : Response
+    {
+
+        return $this->render('dish/showDish.html.twig', [
+            'dish' => $dish,
+        ]);
     }
 }
