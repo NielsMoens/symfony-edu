@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+{% for message in app.flashes('succes') %}
+    <div class="alert alert-success">
+        <h4>{{ message }}</h4>
+    </div>
+{% endfor %}
 <br>
 <div class="container">
 
@@ -11,6 +16,9 @@
             <td>Order Number.</td>
             <td>Name</td>
             <td>Description</td>
+            <td>Price</td>
+            <td>❌</td>
+            <td><a href="{{ path('dish.create') }}">➕</a></td>
         </tr>
         </thead>
         <tbody>
@@ -19,6 +27,9 @@
                 <td>{{ dish.id }}</td>
                 <td>{{ dish.name }}</td>
                 <td>{{ dish.description }}</td>
+                <td>{{ dish.price }}</td>
+                <td><a href="{{ path('dish.remove', {id: dish.id}) }}">❌</a></td>
+                <td></td>
             </tr>
         {% endfor %}
         </tbody>
