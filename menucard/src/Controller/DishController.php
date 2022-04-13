@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Dish;
+use App\Form\DishType;
 use App\Repository\DishRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DishController extends AbstractController
 {
     #[Route('/', name: 'edit')]
-    public function index(DishRepository $dsh)
+    public function index(DishRepository $dsh): Response
     {
         $dishes= $dsh->findAll();
 
@@ -27,14 +27,16 @@ class DishController extends AbstractController
     #[Route('/create', name: 'create')]
     public function create(ManagerRegistry $doctrine): Response
     {
+        //form
         $dish = new Dish();
-        $dish->setName('pizza');
-        $dish->setDescription('checkt da pizzake keer peeken');
+        $form = $this->createForm(DishType::class, $dish);
 
         $entityManager = $doctrine->getManager();
-        $entityManager->persist($dish);
-        $entityManager->flush();
+//        $entityManager->persist($dish);
+//        $entityManager->flush();
 
-       return new Response('Dish has been created');
+        return $this->render('dish/createForm.html.twig', [
+            'createForm' => $form->createView(),
+        ]);
     }
 }
